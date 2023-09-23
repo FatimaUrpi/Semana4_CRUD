@@ -10,5 +10,10 @@ public interface ModalidadRepository extends JpaRepository<Modalidad, Integer>{
 
 	
 	public List<Modalidad> findByNombreIgnoreCase(String nombre);
+	/*Fltro la primera letra*/
+	/*select * from Alumno like */
 	
+	
+	public List<Modalidad> findByNombreLike(String nombre);
+
 }
