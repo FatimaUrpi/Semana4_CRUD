@@ -30,6 +30,8 @@ public class CrudModalidadController {
 	@ResponseBody
 	@GetMapping(value = "/consultaCrudModalidad")
 
+	
+	/**/
 	public List<Modalidad> listaModalidad(String filtro) {
 		List<Modalidad> lstSalida = modalidadService.listaPorNombreLike("%" + filtro + "%");
 		return lstSalida;

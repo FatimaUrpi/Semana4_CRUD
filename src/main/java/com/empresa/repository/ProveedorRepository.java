@@ -10,14 +10,10 @@ public interface ProveedorRepository extends JpaRepository<Proveedor, Integer>{
 	
 	
 	public List<Proveedor> findByNombreIgnoreCase(String nombre);
-	/*Fltro la primera letra*/
-	/*select * from Alumno like */
-	
-	
 	public List<Proveedor> findByNombreLike(String nombre);
-	
-	public List<Proveedor> findByNombreValidacionIgnoreCase(String nombre);
+	public List<Proveedor> findByNombreOrDniIgnoreCase(String nombre, String dni);
 
+	
 }
 
 

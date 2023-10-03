@@ -2,6 +2,8 @@ package com.empresa.entity;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,12 +29,8 @@ public class Proveedor {
 	private String dni;
 	
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date fechaRegistro;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date fechaActualizacion;
-	
-	private int estado;
 	
 	@ManyToOne
 	@JoinColumn(name = "idTipo")

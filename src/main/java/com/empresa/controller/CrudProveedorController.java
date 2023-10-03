@@ -18,8 +18,8 @@ import com.empresa.entity.Proveedor;
 import com.empresa.service.ProveedorService;
 
 @Controller
-
 public class CrudProveedorController {
+
 	@Autowired
 	private ProveedorService proveedorService;
 	
@@ -28,15 +28,7 @@ public class CrudProveedorController {
 		return "crudProveedor";
 	}
 	
-	
-	@GetMapping("/consultarCrudProveedor")
-	@ResponseBody
-	public List<Proveedor> consulta(String filtro) {
-		
-		return proveedorService.listaPorNombreLike("%"+filtro+"%");
-	}
-
-	@PostMapping("/registrarCrudProveedor")
+	@PostMapping("/registraCrudProveedor")
 	@ResponseBody
 	public Map<?, ?> registra(Proveedor obj) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -45,52 +37,58 @@ public class CrudProveedorController {
 		if (objSalida == null) {
 			map.put("mensaje", "Error en el registro");
 		} else {
-			List<Proveedor> listaRe = proveedorService.listaPorNombreLike("%");
-			map.put("lista", listaRe);
+			List<Proveedor> lista = proveedorService.listaPorNombreLike("%");
+			map.put("lista", lista);
 			map.put("mensaje", "Registro exitoso");
 		}
 		return map;
 	}
 	
-	@PostMapping("/actualizarCrudProveedor")
+	@PostMapping("/actualizaCrudProveedor")
 	@ResponseBody
 	public Map<?, ?> actualiza(Proveedor obj) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		  
 		Optional<Proveedor> optProveedor= proveedorService.buscaProveedor(obj.getIdProveedor());
 		obj.setFechaRegistro(optProveedor.get().getFechaRegistro());
-		Proveedor objSalida = proveedorService.actualizarProveedor(obj);
+		Proveedor objSalida = proveedorService.actualizaProveedor(obj);
 		if (objSalida == null) {
-			map.put("mensaje", "Error en la actualización");
+			map.put("mensaje", "Error en actualizar");
 		} else {
-			List<Proveedor> listaAc = proveedorService.listaPorNombreLike("%");
-			map.put("lista", listaAc);
+			List<Proveedor> lista = proveedorService.listaPorNombreLike("%");
+			map.put("lista", lista);
 			map.put("mensaje", "Actualización exitosa");
 		}
 		return map;
-		}
+	}
 	
 	@ResponseBody
-	@PostMapping("/eliminarCrudProveedor")
+	@PostMapping("/eliminaCrudProveedor")
 	public Map<?, ?> elimina(int id) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		Proveedor objProveedor = proveedorService.buscaProveedor(id).get();
-		Proveedor objSalida = proveedorService.actualizarProveedor(objProveedor);
+		Proveedor objSalida = proveedorService.actualizaProveedor(objProveedor);
 
 		if (objSalida == null) {
 			map.put("mensaje", "Error en actualizar");
 		} else {
-			List<Proveedor> listaEli = proveedorService.listaPorNombreLike("%");
-			map.put("lista", listaEli);
+			List<Proveedor> lista = proveedorService.listaPorNombreLike("%");
+			map.put("lista", lista);
 		}
 		return map;
-		}
+	}
 	
-	@GetMapping("/buscaPorNombreProveedor")
+	@GetMapping("/consultaCrudProveedor")
 	@ResponseBody
-	public String validaNombre(String nombre) {
-		List<Proveedor> lstProveedor = proveedorService.listaPorNombreValidacion(nombre);
+	public List<Proveedor> consulta(String filtro) {
+		return proveedorService.listaPorNombreLike("%"+filtro+"%");
+	}
+	
+	@GetMapping("/buscaPorNombreOrDniProveedor" )
+	@ResponseBody
+	public String validaNombreOrDni(String nombre, String dni){
+		List<Proveedor> lstProveedor = proveedorService.listaPorNombreOrDni(nombre, dni);
 		if (CollectionUtils.isEmpty(lstProveedor)) {
 			return "{\"valid\" : true }";
 		} else {
@@ -98,5 +96,5 @@ public class CrudProveedorController {
 		}
 	}
 	
-
+	
 }

@@ -28,8 +28,6 @@ public class RegistraProveedorController {
 	public Map<String, String> registra(Proveedor obj) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		obj.setFechaRegistro(new Date());
-		obj.setFechaActualizacion(new Date());
-		obj.setEstado(1);
 		Proveedor objSalida = proveedorService.insertaProveedor(obj);
 		if (objSalida == null) {
 			map.put("MENSAJE", "Error en el registro");
@@ -42,3 +40,4 @@ public class RegistraProveedorController {
 	
 
 }
+

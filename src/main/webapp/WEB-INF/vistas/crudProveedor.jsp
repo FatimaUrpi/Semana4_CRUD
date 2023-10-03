@@ -1,5 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html lang="esS">
 <head>
@@ -95,17 +93,16 @@
 												<label class="col-lg-3 control-label" for="id_reg_nombre">Nombre</label>
 												<div class="col-lg-8">
 													<input class="form-control" id="id_reg_nombre"
-														name="nombre"
-														placeholder="Ingrese el nombre del proveedor" type="text"
-														maxlength="25" />
+														name="nombre" placeholder="Ingrese el Nombre" type="text"
+														maxlength="20" />
 												</div>
 											</div>
 											<div class="form-group">
 												<label class="col-lg-3 control-label" for="id_reg_dni">DNI</label>
 												<div class="col-lg-8">
 													<input class="form-control" id="id_reg_dni" name="dni"
-														placeholder="Ingrese el número de dni del proveedor"
-														type="text" maxlength="8" />
+														placeholder="Ingrese el número de dni" type="text"
+														maxlength="8" />
 												</div>
 											</div>
 											<div class="form-group">
@@ -133,12 +130,14 @@
 										</div>
 									</div>
 								</div>
+
 							</div>
 						</form>
 
 					</div>
 				</div>
 			</div>
+
 		</div>
 
 
@@ -178,32 +177,31 @@
 											<div class="form-group">
 												<label class="col-lg-3 control-label" for="id_nombre">Nombre</label>
 												<div class="col-lg-3">
-													<input class="form-control" id="id_actu_nombre"
-														name="nombre"
-														placeholder="Ingrese el nombre del proveedor" type="text"
+													<input class="form-control" id="id_act_nombre"
+														name="nombre" placeholder="Ingrese el Nombre" type="text"
 														maxlength="20" />
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-lg-3 control-label" for="id_actu_dni">DNI</label>
+												<label class="col-lg-3 control-label" for="id_act_dni">DNI</label>
 												<div class="col-lg-8">
-													<input class="form-control" id="id_actu_dni" name="dni"
-														placeholder="Ingrese el número de dni del proveedor"
-														type="text" maxlength="8" />
+													<input class="form-control" id="id_act_dni" name="dni"
+														placeholder="Ingrese el número de dni" type="text"
+														maxlength="8" />
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-lg-3 control-label" for="id_actu_tipo">Tipo</label>
+												<label class="col-lg-3 control-label" for="id_act_tipo">Tipo</label>
 												<div class="col-lg-3">
-													<select id="id_actu_tipo" name="tipo" class='form-control'>
+													<select id="id_act_tipo" name="tipo" class='form-control'>
 														<option value=" ">[Seleccione]</option>
 													</select>
 												</div>
 											</div>
 											<div class="form-group">
-												<label class="col-lg-3 control-label" for="id_actu_pais">País</label>
+												<label class="col-lg-3 control-label" for="id_act_pais">País</label>
 												<div class="col-lg-3">
-													<select id="id_actu_pais" name="pais" class='form-control'>
+													<select id="id_act_pais" name="pais" class='form-control'>
 														<option value=" ">[Seleccione]</option>
 													</select>
 												</div>
@@ -231,106 +229,129 @@
 
 
 	<script type="text/javascript">
-		$.getJSON("listaTipo", {}, function(data) {
-			$.each(data, function(i, item) {
-				$("#id_reg_tipo").append(
-						"<option value="+item.idTipo +">" + item.descripcion
-								+ "</option>");
-				$("#id_actu_tipo").append(
-						"<option value="+item.idTipo +">" + item.descripcion
-								+ "</option>");
-			});
-		});
-
 		$.getJSON("listaPais", {}, function(data) {
 			$.each(data, function(i, item) {
 				$("#id_reg_pais").append(
 						"<option value="+item.idPais +">" + item.nombre
 								+ "</option>");
-				$("#id_actu_pais").append(
+				$("#id_act_pais").append(
 						"<option value="+item.idPais +">" + item.nombre
+								+ "</option>");
+			});
+		});
+		$.getJSON("listaTipo", {}, function(data) {
+			$.each(data, function(i, item) {
+				$("#id_reg_tipo").append(
+						"<option value="+item.idTipo +">" + item.descripcion
+								+ "</option>");
+				$("#id_act_tipo").append(
+						"<option value="+item.idTipo +">" + item.descripcion
 								+ "</option>");
 			});
 		});
 
 		$("#id_btn_filtrar").click(function() {
 			var fil = $("#id_txt_filtro").val();
-			$.getJSON("consultarCrudProveedor", {
+			$.getJSON("consultaCrudProveedor", {
 				"filtro" : fil
 			}, function(lista) {
 				agregarGrilla(lista);
 			});
 		});
 
-		function agregarGrilla(lista) {
-			$('#id_table').DataTable().clear();
-			$('#id_table').DataTable().destroy();
-			$('#id_table')
-					.DataTable(
-							{
-								data : lista,
-								searching : false,
-								ordering : true,
-								processing : true,
-								pageLength : 5,
-								lengthChange : false,
-								columns : [
-										{data : "idProveedor"},
-										{data : "nombre"},
-										{data : "dni"},
-										{data : "tipo.descripcion"},
-										{data : "pais.nombre"},
-										{
-											data : function(row, type, val,
-													meta) {
-												var salida = 
-													'<button type="button" style="width: 90px" class="btn btn-info btn-sm" 
-													id="editarBtn_'+ row.idProveedor+ '" onclick="editar(\''+ row.idProveedor+
-															'\',\''+ row.nombre+ '\',\''+ row.dni+ '\',\''+ row.tipo.idTipo+
-															'\',\''+ row.pais.idPais+ '\')">Editar</button>';
-												return salida;
-											},
-											className : 'text-center'
-										},
-										{
-											data : function(row, type, val,
-													meta) {
-												var salida = '<button type="button" style="width: 90px" class="btn btn-warning btn-sm" onclick="accionEliminar('
-														+ row.idProveedor+ ')">Eliminar</button>';
 
-												return salida;
-											},
-											className : 'text-center'
-										}, ]
-							});
+		
+
+		
+		
+		
+		function agregarGrilla(lista) {
+		    $('#id_table').DataTable().clear();
+		    $('#id_table').DataTable().destroy();
+		    $('#id_table').DataTable({
+		        data: lista,
+		        searching: false,
+		        ordering: true,
+		        processing: true,
+		        pageLength: 5,
+		        lengthChange: false,
+		        columns: [
+		            {
+		                data: "idProveedor"
+		            },
+		            {
+		                data: "nombre"
+		            },
+		            {
+		                data: "dni"
+		            },
+		            {
+		                data: "tipo.descripcion"
+		            },
+		            {
+		                data: "pais.nombre"
+		            },
+		            {
+		                data: function (row, type, val, meta) {
+		                    var salida = '<button type="button" style="width: 90px" class="btn btn-info btn-sm" id="editarBtn_' + row.idProveedor + '" onclick="editar(\''
+		                        + row.idProveedor
+		                        + '\',\''
+		                        + row.nombre
+		                        + '\',\''
+		                        + row.dni
+		                        + '\',\''
+		                        + row.tipo.idTipo
+		                        + '\',\''
+		                        + row.pais.idPais
+		                        + '\')">Editar</button>';
+		                    return salida;
+		                },
+		                className: 'text-center'
+		            },
+		            {
+		                data: function (row, type, val, meta) {
+		                    var salida = '<button type="button" style="width: 90px" class="btn btn-warning btn-sm" onclick="accionEliminar('
+		                        + row.idProveedor
+		                        + ')">Eliminar</button>';
+
+		                    return salida;
+		                },
+		                className: 'text-center'
+		            },
+		        ]
+		    });
 		}
 
 		function accionEliminar(id) {
-			$.ajax({
-				type : "POST",
-				url : "eliminarCrudProveedor",
-				data : {
-					"id" : id
-				},
-				success : function(data) {
-					$("#editarBtn_" + id).prop("disabled", true);
-					var celdaEliminar = $("#id_table").DataTable().cell(
-					"#editarBtn_" + id).node().nextSibling;
-					$(celdaEliminar).html("Inhabilitado");
-					agregarGrilla(data.lista);
-				},
-				error : function() {
-					mostrarMensaje(MSG_ERROR);
-				}
-			});
+		    $.ajax({
+		        type: "POST",
+		        url: "eliminaCrudProveedor",
+		        data: {
+		            "id": id
+		        },
+		        success: function (data) {
+		            // Deshabilitar el botón de "Editar" correspondiente
+		            $("#editarBtn_" + id).prop("disabled", true);
+
+		            // Cambiar el contenido de la celda de "Eliminar" a "Inhabilitado"
+		            var celdaEliminar = $("#id_table").DataTable().cell("#editarBtn_" + id).node().nextSibling;
+		            $(celdaEliminar).html("Inhabilitado");
+
+		            // Actualizar la tabla u otras acciones necesarias
+		            agregarGrilla(data.lista);
+		        },
+		        error: function () {
+		            mostrarMensaje(MSG_ERROR);
+		        }
+		    });
 		}
 
 		function editar(id, nombre, dni, idTipo, idPais) {
 			$('#id_ID').val(id);
-			$('#id_actu_nombre').val(nombre);
-			$('#id_actu_dni').val(dni);
-			$('#id_actu_tipo').val(idTipo);
-			$('#id_actu_pais').val(idPais);
+			$('#id_act_nombre').val(nombre);
+			$('#id_act_dni').val(dni);
+			$('#id_act_tipo').val(idTipo);
+			$('#id_act_pais').val(idPais);
 			$('#id_div_modal_actualiza').modal("show");
 		}
 
@@ -347,7 +368,7 @@
 			if (validator.isValid()) {
 				$.ajax({
 					type : "POST",
-					url : "registrarCrudProveedor",
+					url : "registraCrudProveedor",
 					data : $('#id_form_registra').serialize(),
 					success : function(data) {
 						agregarGrilla(data.lista);
@@ -370,7 +391,7 @@
 			if (validator.isValid()) {
 				$.ajax({
 					type : "POST",
-					url : "actualizarCrudProveedor",
+					url : "actualizaCrudProveedor",
 					data : $('#id_form_actualiza').serialize(),
 					success : function(data) {
 						agregarGrilla(data.lista);
@@ -405,10 +426,13 @@
 							min : 5,
 							max : 100
 						},
-						
-					}
-				},
-				"dni" : {
+						remote :{
+		            	    delay: 1000,
+		            	 	url: 'buscaPorNombreOrDniProveedor',
+		            	 	message: 'El Nombre ya existe'
+		             	}
+		            }
+		        },				"dni" : {
 					selector : "#id_reg_dni",
 					validators : {
 						notEmpty : {
@@ -417,9 +441,14 @@
 						regexp : {
 							regexp : /^[0-9]{8}$/,
 							message : 'el dni es 8 dígitos'
-						}
-					}
-				},
+						},
+						remote :{
+		            	    delay: 1000,
+		            	 	url: 'buscaPorNombreOrDniProveedor',
+		            	 	message: 'El DNI ya existe'
+		             	}
+		            }
+		        },
 				"tipo.idTipo" : {
 					selector : '#id_reg_tipo',
 					validators : {
@@ -461,9 +490,13 @@
 							min : 5,
 							max : 100
 						},
-						
-					}
-				},
+						remote :{
+		            	    delay: 1000,
+		            	 	url: 'buscaPorNombreOrDniProveedor',
+		            	 	message: 'El Nombre ya existe'
+		             	}
+		            }
+		        },			
 				"dni" : {
 					selector : "#id_act_dni",
 					validators : {
@@ -474,11 +507,15 @@
 							regexp : /^[0-9]{8}$/,
 							message : 'el dni es 8 dígitos'
 						},
-						
-					}
-				},
+						remote :{
+		            	    delay: 1000,
+		            	 	url: 'buscaPorNombreOrDniProveedor',
+		            	 	message: 'El DNI ya existe'
+		             	}
+		            }
+		        },
 				"tipo.idTipo" : {
-					selector : '#id_actu_tipo',
+					selector : '#id_act_tipo',
 					validators : {
 						notEmpty : {
 							message : 'Tipo es un campo obligatorio'
@@ -486,15 +523,16 @@
 					}
 				},
 				"pais.idPais" : {
-					selector : '#id_actu_pais',
+					selector : '#id_act_pais',
 					validators : {
 						notEmpty : {
 							message : 'País es un campo obligatorio'
 						},
 					}
 				},
+
 			}
-			});
+		});
 	</script>
 </body>
 </html>
